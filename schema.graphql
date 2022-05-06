@@ -2,10 +2,19 @@
 ### Do not make changes to this file directly
 
 
+input CreateUserInput {
+  email: String!
+  first_name: String!
+  last_name: String!
+  organization_id: String!
+  password: String!
+  tenant_current_property_id: String!
+}
+
 type Mutation {
   createOrganization: Organization
   createProperty: Property
-  createUser: User
+  createUser(input: CreateUserInput!): User
   deleteOrganization: User
   deleteProperty: User
   deleteUser: User
@@ -18,9 +27,16 @@ type Organization {
   country: String!
   id: ID!
   name: String!
+
+  """Returns all owned property by landlord through organization"""
+  owned_properties: [Property!]!
   primary_phone_number: String!
   state: String!
   zip: String!
+}
+
+input OrganizationWhereUniqueInput {
+  id: ID!
 }
 
 type Property {
@@ -36,12 +52,21 @@ type Property {
 }
 
 type Query {
-  getOrganization: Organization
+  getOrganization(where: OrganizationWhereUniqueInput!): Organization
   getOrganizations: [Organization!]
+  getUser(where: UserWhereUniqueInput!): User
+  getUsers: [User]!
 }
 
 type User {
   first_name: String!
   id: ID!
   last_name: String!
+
+  """Returns all owned property by landlord through organization"""
+  owned_properties: [Organization!]!
+}
+
+input UserWhereUniqueInput {
+  id: ID!
 }

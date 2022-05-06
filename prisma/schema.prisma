@@ -10,43 +10,55 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum ROLE {
+  Owner
+  Tenant
+  Superintendent
+}
+
 model User {
-  id         String @id @default(cuid())
-  first_name String
-  last_name  String
-  email      String @unique
-  password   String
-  role       Role
+  id                         String       @id @default(cuid())
+  first_name                 String
+  last_name                  String
+  email                      String       @unique
+  password                   String
+  role                       ROLE
+  tenant_current_property    Property     @relation(fields: [tenant_current_property_id], references: [id])
+  tenant_current_property_id String
+  created_at                 DateTime     @default(now())
+  updated_at                 DateTime     @updatedAt
+  organization_id            String
+  organization               Organization @relation(fields: [organization_id], references: [id])
 }
 
 model Organization {
-  id                   String   @id @default(cuid())
+  id                   String     @id @default(cuid())
   name                 String
-  email                String   @unique
+  email                String     @unique
   address              String
   address_2            String
   city                 String
   state                String
-  country              String   @default("US")
+  country              String     @default("US")
   primary_phone_number String
-  properties           Property @relation(fields: [propertyId], references: [id])
-  propertyId           String   @map("property_id")
+  properties           Property[]
+  created_at           DateTime   @default(now())
+  updated_at           DateTime   @updatedAt
+  user                 User[]
 }
 
 model Property {
-  id                   String         @id @default(cuid())
+  id                   String        @id @default(cuid())
   name                 String
   address              String
   address_2            String
   city                 String
   state                String
-  country              String         @default("US")
+  country              String        @default("US")
   primary_phone_number String
-  Organization         Organization[]
-}
-
-enum Role {
-  Owner
-  Renter
-  Superintendent
+  organization         Organization? @relation(fields: [organization_id], references: [id])
+  organization_id      String?
+  user                 User[]
+  created_at           DateTime      @default(now())
+  updated_at           DateTime      @updatedAt
 }

@@ -14,6 +14,20 @@ declare global {
 }
 
 export interface NexusGenInputs {
+  CreateUserInput: { // input type
+    email: string; // String!
+    first_name: string; // String!
+    last_name: string; // String!
+    organization_id: string; // String!
+    password: string; // String!
+    tenant_current_property_id: string; // String!
+  }
+  OrganizationWhereUniqueInput: { // input type
+    id: string; // ID!
+  }
+  UserWhereUniqueInput: { // input type
+    id: string; // ID!
+  }
 }
 
 export interface NexusGenEnums {
@@ -85,6 +99,7 @@ export interface NexusGenFieldTypes {
     country: string; // String!
     id: string; // ID!
     name: string; // String!
+    owned_properties: NexusGenRootTypes['Property'][]; // [Property!]!
     primary_phone_number: string; // String!
     state: string; // String!
     zip: string; // String!
@@ -103,11 +118,14 @@ export interface NexusGenFieldTypes {
   Query: { // field return type
     getOrganization: NexusGenRootTypes['Organization'] | null; // Organization
     getOrganizations: NexusGenRootTypes['Organization'][] | null; // [Organization!]
+    getUser: NexusGenRootTypes['User'] | null; // User
+    getUsers: Array<NexusGenRootTypes['User'] | null>; // [User]!
   }
   User: { // field return type
     first_name: string; // String!
     id: string; // ID!
     last_name: string; // String!
+    owned_properties: NexusGenRootTypes['Organization'][]; // [Organization!]!
   }
 }
 
@@ -127,6 +145,7 @@ export interface NexusGenFieldTypeNames {
     country: 'String'
     id: 'ID'
     name: 'String'
+    owned_properties: 'Property'
     primary_phone_number: 'String'
     state: 'String'
     zip: 'String'
@@ -145,15 +164,31 @@ export interface NexusGenFieldTypeNames {
   Query: { // field return type name
     getOrganization: 'Organization'
     getOrganizations: 'Organization'
+    getUser: 'User'
+    getUsers: 'User'
   }
   User: { // field return type name
     first_name: 'String'
     id: 'ID'
     last_name: 'String'
+    owned_properties: 'Organization'
   }
 }
 
 export interface NexusGenArgTypes {
+  Mutation: {
+    createUser: { // args
+      input: NexusGenInputs['CreateUserInput']; // CreateUserInput!
+    }
+  }
+  Query: {
+    getOrganization: { // args
+      where: NexusGenInputs['OrganizationWhereUniqueInput']; // OrganizationWhereUniqueInput!
+    }
+    getUser: { // args
+      where: NexusGenInputs['UserWhereUniqueInput']; // UserWhereUniqueInput!
+    }
+  }
 }
 
 export interface NexusGenAbstractTypeMembers {
@@ -164,7 +199,7 @@ export interface NexusGenTypeInterfaces {
 
 export type NexusGenObjectNames = keyof NexusGenObjects;
 
-export type NexusGenInputNames = never;
+export type NexusGenInputNames = keyof NexusGenInputs;
 
 export type NexusGenEnumNames = never;
 
