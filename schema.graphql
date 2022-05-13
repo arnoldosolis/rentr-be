@@ -4,12 +4,12 @@
 
 input CreateUserInput {
   email: String
-  first_name: String
-  last_name: String
-  organization_id: String
   password: String
-  role: Role
-  tenant_current_property_id: String
+}
+
+input CreateUserInputTemp {
+  email: String
+  password: String
 }
 
 type Mutation {
@@ -18,7 +18,9 @@ type Mutation {
   createUser(user: CreateUserInput!): User
   deleteOrganization: User
   deleteProperty: User
-  deleteUser(user: UserWhereUniqueInput!): User
+  deleteUser(user: UserWhereUniqueInput!): User!
+  login(user: CreateUserInputTemp!): User!
+  register(user: CreateUserInputTemp!): User!
   updateUser(user: CreateUserInput!, user_id: UserWhereUniqueInput!): User
 }
 
@@ -58,13 +60,6 @@ type Query {
   getOrganizations: [Organization!]
   getUser(where: UserWhereUniqueInput!): User
   getUsers: [User]!
-}
-
-"""The first Star Wars episodes released"""
-enum Role {
-  Owner
-  Superintendent
-  Tenant
 }
 
 type User {
