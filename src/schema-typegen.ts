@@ -121,6 +121,7 @@ export interface NexusGenFieldTypes {
   Query: { // field return type
     getOrganization: NexusGenRootTypes['Organization'] | null; // Organization
     getOrganizations: NexusGenRootTypes['Organization'][] | null; // [Organization!]
+    getSelf: NexusGenRootTypes['User'] | null; // User
     getUser: NexusGenRootTypes['User'] | null; // User
     getUsers: Array<NexusGenRootTypes['User'] | null>; // [User]!
   }
@@ -170,6 +171,7 @@ export interface NexusGenFieldTypeNames {
   Query: { // field return type name
     getOrganization: 'Organization'
     getOrganizations: 'Organization'
+    getSelf: 'User'
     getUser: 'User'
     getUsers: 'User'
   }

@@ -58,6 +58,7 @@ type Property {
 type Query {
   getOrganization(where: OrganizationWhereUniqueInput!): Organization
   getOrganizations: [Organization!]
+  getSelf: User
   getUser(where: UserWhereUniqueInput!): User
   getUsers: [User]!
 }

@@ -60,7 +60,7 @@ export const deleteUser = mutationField("deleteUser", {
 export const register = mutationField("register", {
   type: User,
   args: { user: nonNull(CreateUserInputTemp) },
-  resolve: async (_root, args, ctx) => {
+  resolve: async (_root, args, { prisma, req }) => {
     if (args.user.email.length <= 2) {
       throw new ApolloError("Email must be greater than 2 characters");
     }
@@ -69,7 +69,7 @@ export const register = mutationField("register", {
     }
     try {
       const hashedPassword = await argon2.hash(args.user.password);
-      const newUser = await ctx.prisma.user.create({
+      const newUser = await prisma.user.create({
         data: {
           // first_name: args.user?.first_name || "N/A",
           // last_name: args.user?.last_name || "N/A",
@@ -78,6 +78,7 @@ export const register = mutationField("register", {
           // role: args.user?.role || ROLE.Tenant,
         },
       });
+      req.session.user_id = newUser.id;
       return newUser;
     } catch (err) {
       console.log(`Error: ${err}`);
@@ -89,8 +90,8 @@ export const register = mutationField("register", {
 export const login = mutationField("login", {
   type: User,
   args: { user: nonNull(CreateUserInputTemp) },
-  resolve: async (_root, args, ctx) => {
-    const userExists = await ctx.prisma.user.findUnique({
+  resolve: async (_root, args, { prisma, req }) => {
+    const userExists = await prisma.user.findUnique({
       where: {
         email: args.user.email,
       },
@@ -102,6 +103,7 @@ export const login = mutationField("login", {
     if (!valid) {
       throw new ApolloError("Incorrect password");
     }
+    req.session.user_id = userExists.id;
     return userExists;
   },
 });

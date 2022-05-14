@@ -21,3 +21,24 @@ export const getUsers = queryField("getUsers", {
     return ctx.prisma.user.findMany({});
   },
 });
+
+export const getSelfHelper = async ({ prisma, req }: { prisma: any; req: any }) => {
+  // if not logged in
+  if (!req.session.user_id) {
+    return null;
+  }
+  const user = await prisma.user.findUnique({
+    where: {
+      id: req.session.user_id,
+    },
+  });
+  console.log(req.session);
+  return user;
+};
+
+export const getSelf = queryField("getSelf", {
+  type: nullable(User),
+  resolve: async (_root, _args, { prisma, req }) => {
+    return await getSelfHelper({ prisma, req });
+  },
+});
