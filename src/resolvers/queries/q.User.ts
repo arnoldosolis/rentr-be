@@ -1,3 +1,4 @@
+import { ApolloError } from "apollo-server-core";
 import { list, nonNull, nullable, queryField } from "nexus";
 import { UserWhereUniqueInput, UserWhereUniqueInputEmail } from "../inputs/index";
 import { User } from "../models";
@@ -47,6 +48,9 @@ export const getUserByEmail = queryField("getUserByEmail", {
   type: nullable(User),
   args: { user: nonNull(UserWhereUniqueInputEmail) },
   resolve: async (_root, args, ctx) => {
+    if (!args.user.email) {
+      throw new ApolloError("Email not passed in");
+    }
     return await ctx.prisma.user.findUnique({
       where: {
         email: args.user.email,

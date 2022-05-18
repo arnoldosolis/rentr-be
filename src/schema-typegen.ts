@@ -22,9 +22,6 @@ export interface NexusGenInputs {
     email?: string | null; // String
     password?: string | null; // String
   }
-  OrganizationWhereUniqueInput: { // input type
-    id: string; // ID!
-  }
   UserWhereUniqueInput: { // input type
     id: string; // ID!
   }
@@ -46,33 +43,10 @@ export interface NexusGenScalars {
 
 export interface NexusGenObjects {
   Mutation: {};
-  Organization: { // root type
-    address: string; // String!
-    address_2: string; // String!
-    city: string; // String!
-    country: string; // String!
-    id: string; // ID!
-    name: string; // String!
-    primary_phone_number: string; // String!
-    state: string; // String!
-    zip: string; // String!
-  }
-  Property: { // root type
-    address: string; // String!
-    address_2: string; // String!
-    city: string; // String!
-    country: string; // String!
-    id: string; // ID!
-    name: string; // String!
-    primary_phone_number: string; // String!
-    state: string; // String!
-    zip: string; // String!
-  }
   Query: {};
   User: { // root type
-    first_name: string; // String!
+    email: string; // String!
     id: string; // ID!
-    last_name: string; // String!
   }
 }
 
@@ -88,111 +62,44 @@ export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars
 
 export interface NexusGenFieldTypes {
   Mutation: { // field return type
-    createOrganization: NexusGenRootTypes['Organization'] | null; // Organization
-    createProperty: NexusGenRootTypes['Property'] | null; // Property
-    createUser: NexusGenRootTypes['User'] | null; // User
-    deleteOrganization: NexusGenRootTypes['User'] | null; // User
-    deleteProperty: NexusGenRootTypes['User'] | null; // User
     deleteUser: NexusGenRootTypes['User']; // User!
     login: NexusGenRootTypes['User']; // User!
     register: NexusGenRootTypes['User']; // User!
     updateUser: NexusGenRootTypes['User'] | null; // User
   }
-  Organization: { // field return type
-    address: string; // String!
-    address_2: string; // String!
-    city: string; // String!
-    country: string; // String!
-    id: string; // ID!
-    name: string; // String!
-    owned_properties: NexusGenRootTypes['Property'][]; // [Property!]!
-    primary_phone_number: string; // String!
-    state: string; // String!
-    zip: string; // String!
-  }
-  Property: { // field return type
-    address: string; // String!
-    address_2: string; // String!
-    city: string; // String!
-    country: string; // String!
-    id: string; // ID!
-    name: string; // String!
-    primary_phone_number: string; // String!
-    state: string; // String!
-    zip: string; // String!
-  }
   Query: { // field return type
-    getOrganization: NexusGenRootTypes['Organization'] | null; // Organization
-    getOrganizations: NexusGenRootTypes['Organization'][] | null; // [Organization!]
     getSelf: NexusGenRootTypes['User'] | null; // User
     getUser: NexusGenRootTypes['User'] | null; // User
     getUserByEmail: NexusGenRootTypes['User'] | null; // User
     getUsers: Array<NexusGenRootTypes['User'] | null>; // [User]!
   }
   User: { // field return type
-    first_name: string; // String!
+    email: string; // String!
     id: string; // ID!
-    last_name: string; // String!
-    owned_properties: NexusGenRootTypes['Organization'][]; // [Organization!]!
   }
 }
 
 export interface NexusGenFieldTypeNames {
   Mutation: { // field return type name
-    createOrganization: 'Organization'
-    createProperty: 'Property'
-    createUser: 'User'
-    deleteOrganization: 'User'
-    deleteProperty: 'User'
     deleteUser: 'User'
     login: 'User'
     register: 'User'
     updateUser: 'User'
   }
-  Organization: { // field return type name
-    address: 'String'
-    address_2: 'String'
-    city: 'String'
-    country: 'String'
-    id: 'ID'
-    name: 'String'
-    owned_properties: 'Property'
-    primary_phone_number: 'String'
-    state: 'String'
-    zip: 'String'
-  }
-  Property: { // field return type name
-    address: 'String'
-    address_2: 'String'
-    city: 'String'
-    country: 'String'
-    id: 'ID'
-    name: 'String'
-    primary_phone_number: 'String'
-    state: 'String'
-    zip: 'String'
-  }
   Query: { // field return type name
-    getOrganization: 'Organization'
-    getOrganizations: 'Organization'
     getSelf: 'User'
     getUser: 'User'
     getUserByEmail: 'User'
     getUsers: 'User'
   }
   User: { // field return type name
-    first_name: 'String'
+    email: 'String'
     id: 'ID'
-    last_name: 'String'
-    owned_properties: 'Organization'
   }
 }
 
 export interface NexusGenArgTypes {
   Mutation: {
-    createUser: { // args
-      user: NexusGenInputs['CreateUserInput']; // CreateUserInput!
-    }
     deleteUser: { // args
       user: NexusGenInputs['UserWhereUniqueInput']; // UserWhereUniqueInput!
     }
@@ -208,9 +115,6 @@ export interface NexusGenArgTypes {
     }
   }
   Query: {
-    getOrganization: { // args
-      where: NexusGenInputs['OrganizationWhereUniqueInput']; // OrganizationWhereUniqueInput!
-    }
     getUser: { // args
       where: NexusGenInputs['UserWhereUniqueInput']; // UserWhereUniqueInput!
     }

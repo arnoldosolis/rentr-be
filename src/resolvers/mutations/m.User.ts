@@ -5,23 +5,23 @@ import { User } from "../models";
 import argon2 from "argon2";
 import { ApolloError } from "apollo-server-core";
 
-export const createUser = mutationField("createUser", {
-  type: nullable(User),
-  args: { user: nonNull(CreateUserInput) },
-  resolve: async (_root, args, ctx) => {
-    return ctx.prisma.user.create({
-      data: {
-        first_name: args.user?.first_name || "",
-        last_name: args.user?.last_name || "",
-        email: args.user?.email || "",
-        password: args.user?.password || "",
-        // role: args.user?.role || ROLE.Tenant,
-        tenant_current_property_id: args.user?.tenant_current_property_id || "",
-        organization_id: args.user?.organization_id || "",
-      },
-    });
-  },
-});
+// export const createUser = mutationField("createUser", {
+//   type: nullable(User),
+//   args: { user: nonNull(CreateUserInput) },
+//   resolve: async (_root, args, ctx) => {
+//     return ctx.prisma.user.create({
+//       data: {
+//         first_name: args.user?.first_name || "",
+//         last_name: args.user?.last_name || "",
+//         email: args.user?.email || "",
+//         password: args.user?.password || "",
+//         // role: args.user?.role || ROLE.Tenant,
+//         tenant_current_property_id: args.user?.tenant_current_property_id || "",
+//         organization_id: args.user?.organization_id || "",
+//       },
+//     });
+//   },
+// });
 
 export const updateUser = mutationField("updateUser", {
   type: nullable(User),
@@ -61,8 +61,14 @@ export const register = mutationField("register", {
   type: User,
   args: { user: nonNull(CreateUserInputTemp) },
   resolve: async (_root, args, { prisma, req }) => {
+    if (!args.user.email) {
+      throw new ApolloError("No email passed in");
+    }
     if (!args.user.email.length) {
       throw new ApolloError("Must include an email");
+    }
+    if (!args.user.password) {
+      throw new ApolloError("No password passed in");
     }
     if (args.user.password.length <= 2) {
       throw new ApolloError("Password must be greater than 2 characters");
@@ -78,7 +84,7 @@ export const register = mutationField("register", {
           // role: args.user?.role || ROLE.Tenant,
         },
       });
-      req.session.user_id = newUser.id;
+      (req.session as any).user_id = newUser.id;
       return newUser;
     } catch (err) {
       console.log(`Error: ${err}`);
@@ -91,19 +97,25 @@ export const login = mutationField("login", {
   type: User,
   args: { user: nonNull(CreateUserInputTemp) },
   resolve: async (_root, args, { prisma, req }) => {
+    if (!args.user.email) {
+      throw new ApolloError("Email not passed in");
+    }
     const userExists = await prisma.user.findUnique({
       where: {
-        email: args.user.email,
+        email: args.user?.email,
       },
     });
     if (!userExists) {
       throw new ApolloError("User does not exist or you did not enter correct email");
     }
+    if (!args.user.password) {
+      throw new ApolloError("Password not passed in");
+    }
     const valid = await argon2.verify(userExists.password, args.user.password);
     if (!valid) {
       throw new ApolloError("Incorrect password");
     }
-    req.session.user_id = userExists.id;
+    (req.session as any).user_id = userExists.id;
     return userExists;
   },
 });

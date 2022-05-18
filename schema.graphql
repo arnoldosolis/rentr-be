@@ -13,51 +13,13 @@ input CreateUserInputTemp {
 }
 
 type Mutation {
-  createOrganization: Organization
-  createProperty: Property
-  createUser(user: CreateUserInput!): User
-  deleteOrganization: User
-  deleteProperty: User
   deleteUser(user: UserWhereUniqueInput!): User!
   login(user: CreateUserInputTemp!): User!
   register(user: CreateUserInputTemp!): User!
   updateUser(user: CreateUserInput!, user_id: UserWhereUniqueInput!): User
 }
 
-type Organization {
-  address: String!
-  address_2: String!
-  city: String!
-  country: String!
-  id: ID!
-  name: String!
-
-  """Returns all owned property by landlord through organization"""
-  owned_properties: [Property!]!
-  primary_phone_number: String!
-  state: String!
-  zip: String!
-}
-
-input OrganizationWhereUniqueInput {
-  id: ID!
-}
-
-type Property {
-  address: String!
-  address_2: String!
-  city: String!
-  country: String!
-  id: ID!
-  name: String!
-  primary_phone_number: String!
-  state: String!
-  zip: String!
-}
-
 type Query {
-  getOrganization(where: OrganizationWhereUniqueInput!): Organization
-  getOrganizations: [Organization!]
   getSelf: User
   getUser(where: UserWhereUniqueInput!): User
   getUserByEmail(user: UserWhereUniqueInputEmail!): User
@@ -65,12 +27,8 @@ type Query {
 }
 
 type User {
-  first_name: String!
+  email: String!
   id: ID!
-  last_name: String!
-
-  """Returns all owned property by landlord through organization"""
-  owned_properties: [Organization!]!
 }
 
 input UserWhereUniqueInput {
