@@ -60,6 +60,7 @@ type Query {
   getOrganizations: [Organization!]
   getSelf: User
   getUser(where: UserWhereUniqueInput!): User
+  getUserByEmail(user: UserWhereUniqueInputEmail!): User
   getUsers: [User]!
 }
 
@@ -74,4 +75,8 @@ type User {
 
 input UserWhereUniqueInput {
   id: ID!
+}
+
+input UserWhereUniqueInputEmail {
+  email: String
 }

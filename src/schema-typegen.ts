@@ -28,6 +28,9 @@ export interface NexusGenInputs {
   UserWhereUniqueInput: { // input type
     id: string; // ID!
   }
+  UserWhereUniqueInputEmail: { // input type
+    email?: string | null; // String
+  }
 }
 
 export interface NexusGenEnums {
@@ -123,6 +126,7 @@ export interface NexusGenFieldTypes {
     getOrganizations: NexusGenRootTypes['Organization'][] | null; // [Organization!]
     getSelf: NexusGenRootTypes['User'] | null; // User
     getUser: NexusGenRootTypes['User'] | null; // User
+    getUserByEmail: NexusGenRootTypes['User'] | null; // User
     getUsers: Array<NexusGenRootTypes['User'] | null>; // [User]!
   }
   User: { // field return type
@@ -173,6 +177,7 @@ export interface NexusGenFieldTypeNames {
     getOrganizations: 'Organization'
     getSelf: 'User'
     getUser: 'User'
+    getUserByEmail: 'User'
     getUsers: 'User'
   }
   User: { // field return type name
@@ -208,6 +213,9 @@ export interface NexusGenArgTypes {
     }
     getUser: { // args
       where: NexusGenInputs['UserWhereUniqueInput']; // UserWhereUniqueInput!
+    }
+    getUserByEmail: { // args
+      user: NexusGenInputs['UserWhereUniqueInputEmail']; // UserWhereUniqueInputEmail!
     }
   }
 }

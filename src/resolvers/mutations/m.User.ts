@@ -61,8 +61,8 @@ export const register = mutationField("register", {
   type: User,
   args: { user: nonNull(CreateUserInputTemp) },
   resolve: async (_root, args, { prisma, req }) => {
-    if (args.user.email.length <= 2) {
-      throw new ApolloError("Email must be greater than 2 characters");
+    if (!args.user.email.length) {
+      throw new ApolloError("Must include an email");
     }
     if (args.user.password.length <= 2) {
       throw new ApolloError("Password must be greater than 2 characters");

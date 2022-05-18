@@ -7,12 +7,18 @@ import { createContext } from "./context";
 import { createClient } from "redis";
 import session from "express-session";
 import connectRedis from "connect-redis";
+import cors from "cors";
 
 async function startApolloServer() {
   const app = express();
   const RedisStore = connectRedis(session);
-  // const redisClient = redis.createClient();
   const redisClient = createClient({ legacyMode: true });
+  app.use(
+    cors({
+      origin: "http://localhost:3000",
+      credentials: true,
+    }),
+  );
   redisClient.connect().catch(console.error);
   app.use(
     session({
@@ -36,8 +42,11 @@ async function startApolloServer() {
     plugins: [ApolloServerPluginDrainHttpServer({ httpServer }), ApolloServerPluginLandingPageGraphQLPlayground()],
   });
   await server.start();
-
-  server.applyMiddleware({ app });
+  server.applyMiddleware({
+    app,
+    path: "/",
+    cors: false,
+  });
   await new Promise<void>((resolve) => {
     httpServer.listen({ port: 4000 });
     resolve();

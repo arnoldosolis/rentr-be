@@ -34,3 +34,10 @@ export const CreateUserInputTemp = inputObjectType({
     t.string("password");
   },
 });
+
+export const UserWhereUniqueInputEmail = inputObjectType({
+  name: "UserWhereUniqueInputEmail",
+  definition(t) {
+    t.string("email");
+  },
+});

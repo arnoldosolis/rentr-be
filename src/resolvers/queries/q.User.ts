@@ -1,5 +1,5 @@
 import { list, nonNull, nullable, queryField } from "nexus";
-import { UserWhereUniqueInput } from "../inputs/index";
+import { UserWhereUniqueInput, UserWhereUniqueInputEmail } from "../inputs/index";
 import { User } from "../models";
 
 export const getUser = queryField("getUser", {
@@ -40,5 +40,17 @@ export const getSelf = queryField("getSelf", {
   type: nullable(User),
   resolve: async (_root, _args, { prisma, req }) => {
     return await getSelfHelper({ prisma, req });
+  },
+});
+
+export const getUserByEmail = queryField("getUserByEmail", {
+  type: nullable(User),
+  args: { user: nonNull(UserWhereUniqueInputEmail) },
+  resolve: async (_root, args, ctx) => {
+    return await ctx.prisma.user.findUnique({
+      where: {
+        email: args.user.email,
+      },
+    });
   },
 });
