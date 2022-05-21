@@ -1,9 +1,12 @@
 // import { ROLE } from "@prisma/client";
-import { mutationField, nonNull, nullable } from "nexus";
+import { mutationField, nonNull, nullable, stringArg } from "nexus";
 import { CreateUserInput, CreateUserInputTemp, UserWhereUniqueInput } from "../inputs";
 import { User } from "../models";
 import argon2 from "argon2";
 import { ApolloError } from "apollo-server-core";
+import { sendEmail } from "../../services/sendEmail";
+import { v4 } from "uuid";
+import { FORGOT_PASSWORD_PREFIX } from "../../variables";
 
 // export const createUser = mutationField("createUser", {
 //   type: nullable(User),
@@ -134,5 +137,68 @@ export const logout = mutationField("logout", {
         resolve(true);
       }),
     );
+  },
+});
+
+export const forgotPassword = mutationField("forgotPassword", {
+  type: "Boolean",
+  args: { email: stringArg() },
+  resolve: async (_root, args, { prisma, redis }) => {
+    if (!args.email) {
+      throw new ApolloError("No email passed in");
+    }
+    const user = await prisma.user.findUnique({
+      where: {
+        email: args.email,
+      },
+    });
+    if (!user) {
+      // throw error here however
+      throw new ApolloError("Email does not exist");
+    }
+
+    const token = v4();
+    try {
+      await redis.set(FORGOT_PASSWORD_PREFIX + token, user.id, "EX", 1000 * 60 * 60 * 24 * 3); // 3 days
+      await sendEmail(args.email, `<a href=http://localhost:3000/forgot-password/${token}>reset password</a>`);
+      return true;
+    } catch (err) {
+      console.log(redis);
+      console.log(err);
+      throw new ApolloError(`forgotPassword: ${err}`);
+    }
+  },
+});
+
+export const changePassword = mutationField("changePassword", {
+  type: User,
+  args: { token: stringArg(), password: stringArg() },
+  resolve: async (_root, args, { redis, prisma }) => {
+    const user_id = await redis.get(FORGOT_PASSWORD_PREFIX + args.token);
+    if (!user_id) {
+      throw new ApolloError("Token expired");
+    }
+    const user = await prisma.user.findUnique({
+      where: {
+        id: user_id,
+      },
+    });
+    if (!user) {
+      throw new ApolloError("User does not exist");
+    }
+    if (!args.password) {
+      throw new ApolloError("No password passed in");
+    }
+    const hashedPassword = await argon2.hash(args.password);
+    const res = await prisma.user.update({
+      where: {
+        id: user_id,
+      },
+      data: {
+        password: hashedPassword,
+      },
+    });
+    console.log(res);
+    return res;
   },
 });

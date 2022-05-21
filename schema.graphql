@@ -13,7 +13,9 @@ input CreateUserInputTemp {
 }
 
 type Mutation {
+  changePassword(password: String, token: String): User!
   deleteUser(user: UserWhereUniqueInput!): User!
+  forgotPassword(email: String): Boolean!
   login(user: CreateUserInputTemp!): User!
   logout: Boolean!
   register(user: CreateUserInputTemp!): User!

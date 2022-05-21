@@ -4,26 +4,30 @@ import express from "express";
 import http from "http";
 import { schema } from "./schema";
 import { createContext } from "./context";
-import { createClient } from "redis";
+// import { createClient } from "redis";
+import Redis from "ioredis";
 import session from "express-session";
 import connectRedis from "connect-redis";
 import cors from "cors";
+import { COOKIE_NAME } from "./variables";
 
 async function startApolloServer() {
   const app = express();
   const RedisStore = connectRedis(session);
-  const redisClient = createClient({ legacyMode: true });
+  // const redisClient = createClient({ legacyMode: true });
+  const redis = new Redis();
   app.use(
     cors({
       origin: "http://localhost:3000",
       credentials: true,
     }),
   );
-  redisClient.connect().catch(console.error);
+  // redisClient.connect().catch(console.error);
   app.use(
     session({
-      name: "qid",
-      store: new RedisStore({ client: <any>redisClient }),
+      name: COOKIE_NAME,
+      // store: new RedisStore({ client: <any>redisClient }),
+      store: new RedisStore({ client: redis }),
       cookie: {
         maxAge: 1000 * 60 * 60 * 24 * 365 * 10, // 10 years
         httpOnly: true,

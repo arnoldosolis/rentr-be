@@ -62,7 +62,9 @@ export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars
 
 export interface NexusGenFieldTypes {
   Mutation: { // field return type
+    changePassword: NexusGenRootTypes['User']; // User!
     deleteUser: NexusGenRootTypes['User']; // User!
+    forgotPassword: boolean; // Boolean!
     login: NexusGenRootTypes['User']; // User!
     logout: boolean; // Boolean!
     register: NexusGenRootTypes['User']; // User!
@@ -82,7 +84,9 @@ export interface NexusGenFieldTypes {
 
 export interface NexusGenFieldTypeNames {
   Mutation: { // field return type name
+    changePassword: 'User'
     deleteUser: 'User'
+    forgotPassword: 'Boolean'
     login: 'User'
     logout: 'Boolean'
     register: 'User'
@@ -102,8 +106,15 @@ export interface NexusGenFieldTypeNames {
 
 export interface NexusGenArgTypes {
   Mutation: {
+    changePassword: { // args
+      password?: string | null; // String
+      token?: string | null; // String
+    }
     deleteUser: { // args
       user: NexusGenInputs['UserWhereUniqueInput']; // UserWhereUniqueInput!
+    }
+    forgotPassword: { // args
+      email?: string | null; // String
     }
     login: { // args
       user: NexusGenInputs['CreateUserInputTemp']; // CreateUserInputTemp!
