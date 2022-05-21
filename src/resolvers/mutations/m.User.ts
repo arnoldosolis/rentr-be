@@ -173,8 +173,9 @@ export const forgotPassword = mutationField("forgotPassword", {
 export const changePassword = mutationField("changePassword", {
   type: User,
   args: { token: stringArg(), password: stringArg() },
-  resolve: async (_root, args, { redis, prisma }) => {
-    const user_id = await redis.get(FORGOT_PASSWORD_PREFIX + args.token);
+  resolve: async (_root, args, { redis, prisma, req }) => {
+    const key = FORGOT_PASSWORD_PREFIX + args.token;
+    const user_id = await redis.get(key);
     if (!user_id) {
       throw new ApolloError("Token expired");
     }
@@ -198,6 +199,11 @@ export const changePassword = mutationField("changePassword", {
         password: hashedPassword,
       },
     });
+
+    await redis.del(key);
+
+    // log user in after change password
+    (req.session as any).user_id = user.id;
     console.log(res);
     return res;
   },
