@@ -64,6 +64,7 @@ export interface NexusGenFieldTypes {
   Mutation: { // field return type
     deleteUser: NexusGenRootTypes['User']; // User!
     login: NexusGenRootTypes['User']; // User!
+    logout: boolean; // Boolean!
     register: NexusGenRootTypes['User']; // User!
     updateUser: NexusGenRootTypes['User'] | null; // User
   }
@@ -83,6 +84,7 @@ export interface NexusGenFieldTypeNames {
   Mutation: { // field return type name
     deleteUser: 'User'
     login: 'User'
+    logout: 'Boolean'
     register: 'User'
     updateUser: 'User'
   }

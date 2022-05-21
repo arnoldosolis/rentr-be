@@ -119,3 +119,20 @@ export const login = mutationField("login", {
     return userExists;
   },
 });
+
+export const logout = mutationField("logout", {
+  type: "Boolean",
+  resolve: async (_root, _args, { req, res }) => {
+    return new Promise((resolve) =>
+      req.session.destroy((err) => {
+        res.clearCookie("qid");
+        if (err) {
+          console.log(err);
+          resolve(false);
+          return;
+        }
+        resolve(true);
+      }),
+    );
+  },
+});

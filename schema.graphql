@@ -15,6 +15,7 @@ input CreateUserInputTemp {
 type Mutation {
   deleteUser(user: UserWhereUniqueInput!): User!
   login(user: CreateUserInputTemp!): User!
+  logout: Boolean!
   register(user: CreateUserInputTemp!): User!
   updateUser(user: CreateUserInput!, user_id: UserWhereUniqueInput!): User
 }
