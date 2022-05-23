@@ -160,7 +160,7 @@ export const forgotPassword = mutationField("forgotPassword", {
     const token = v4();
     try {
       await redis.set(FORGOT_PASSWORD_PREFIX + token, user.id, "EX", 1000 * 60 * 60 * 24 * 3); // 3 days
-      await sendEmail(args.email, `<a href=http://localhost:3000/forgot-password/${token}>reset password</a>`);
+      await sendEmail(args.email, `<a href=http://localhost:3000/reset-password/${token}>reset password</a>`);
       return true;
     } catch (err) {
       console.log(redis);
