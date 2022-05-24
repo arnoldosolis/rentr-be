@@ -43,10 +43,22 @@ export interface NexusGenScalars {
 
 export interface NexusGenObjects {
   Mutation: {};
+  Property: { // root type
+    address: string; // String!
+    address_2: string; // String!
+    city: string; // String!
+    country: string; // String!
+    id: string; // ID!
+    name: string; // String!
+    primary_phone_number: string; // String!
+    state: string; // String!
+    zip: string; // String!
+  }
   Query: {};
   User: { // root type
     email: string; // String!
     id: string; // ID!
+    role: string; // String!
   }
 }
 
@@ -63,12 +75,24 @@ export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars
 export interface NexusGenFieldTypes {
   Mutation: { // field return type
     changePassword: NexusGenRootTypes['User']; // User!
+    createProperty: NexusGenRootTypes['Property']; // Property!
     deleteUser: NexusGenRootTypes['User']; // User!
     forgotPassword: boolean; // Boolean!
     login: NexusGenRootTypes['User']; // User!
     logout: boolean; // Boolean!
     register: NexusGenRootTypes['User']; // User!
     updateUser: NexusGenRootTypes['User'] | null; // User
+  }
+  Property: { // field return type
+    address: string; // String!
+    address_2: string; // String!
+    city: string; // String!
+    country: string; // String!
+    id: string; // ID!
+    name: string; // String!
+    primary_phone_number: string; // String!
+    state: string; // String!
+    zip: string; // String!
   }
   Query: { // field return type
     getSelf: NexusGenRootTypes['User'] | null; // User
@@ -79,18 +103,31 @@ export interface NexusGenFieldTypes {
   User: { // field return type
     email: string; // String!
     id: string; // ID!
+    role: string; // String!
   }
 }
 
 export interface NexusGenFieldTypeNames {
   Mutation: { // field return type name
     changePassword: 'User'
+    createProperty: 'Property'
     deleteUser: 'User'
     forgotPassword: 'Boolean'
     login: 'User'
     logout: 'Boolean'
     register: 'User'
     updateUser: 'User'
+  }
+  Property: { // field return type name
+    address: 'String'
+    address_2: 'String'
+    city: 'String'
+    country: 'String'
+    id: 'ID'
+    name: 'String'
+    primary_phone_number: 'String'
+    state: 'String'
+    zip: 'String'
   }
   Query: { // field return type name
     getSelf: 'User'
@@ -101,6 +138,7 @@ export interface NexusGenFieldTypeNames {
   User: { // field return type name
     email: 'String'
     id: 'ID'
+    role: 'String'
   }
 }
 

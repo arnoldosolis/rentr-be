@@ -17,48 +17,40 @@ enum ROLE {
 }
 
 model User {
-  id         String   @id @default(cuid())
-  // first_name                 String
-  // last_name                  String
-  email      String   @unique
-  password   String
-  // role                       ROLE
-  // tenant_current_property    Property     @relation(fields: [tenant_current_property_id], references: [id])
-  // tenant_current_property_id String
+  id         String   @id @default(uuid())
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
-  // organization_id            String
-  // organization               Organization @relation(fields: [organization_id], references: [id])
+  first_name String
+  last_name  String
+  email      String   @unique
+  password   String
+  role       ROLE
 }
 
-// model Organization {
-//   id                   String     @id @default(cuid())
-//   name                 String
-//   email                String     @unique
-//   address              String
-//   address_2            String
-//   city                 String
-//   state                String
-//   country              String     @default("US")
-//   primary_phone_number String
-//   properties           Property[]
-//   created_at           DateTime   @default(now())
-//   updated_at           DateTime   @updatedAt
-//   user                 User[]
-// }
+model Organization {
+  id                   String   @id @default(uuid())
+  created_at           DateTime @default(now())
+  updated_at           DateTime @updatedAt
+  name                 String
+  email                String   @unique
+  address              String
+  address_2            String
+  city                 String
+  state                String
+  country              String   @default("US")
+  primary_phone_number String
+}
 
-// model Property {
-//   id                   String        @id @default(cuid())
-//   name                 String
-//   address              String
-//   address_2            String
-//   city                 String
-//   state                String
-//   country              String        @default("US")
-//   primary_phone_number String
-//   organization         Organization? @relation(fields: [organization_id], references: [id])
-//   organization_id      String?
-//   user                 User[]
-//   created_at           DateTime      @default(now())
-//   updated_at           DateTime      @updatedAt
-// }
+model Property {
+  id                   String   @id @default(uuid())
+  created_at           DateTime @default(now())
+  updated_at           DateTime @updatedAt
+  name                 String
+  address              String
+  address_2            String
+  zip                  String
+  city                 String
+  state                String
+  country              String   @default("US")
+  primary_phone_number String
+}

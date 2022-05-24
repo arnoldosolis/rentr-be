@@ -6,6 +6,7 @@ export const User = objectType({
   definition(t) {
     t.id("id");
     t.string("email");
+    t.string("role");
     // t.string("first_name");
     // t.string("last_name");
     // t.nonNull.list.nonNull.field("owned_properties", {

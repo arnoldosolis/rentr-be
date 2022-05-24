@@ -14,12 +14,25 @@ input CreateUserInputTemp {
 
 type Mutation {
   changePassword(password: String, token: String): User!
+  createProperty: Property!
   deleteUser(user: UserWhereUniqueInput!): User!
   forgotPassword(email: String): Boolean!
   login(user: CreateUserInputTemp!): User!
   logout: Boolean!
   register(user: CreateUserInputTemp!): User!
   updateUser(user: CreateUserInput!, user_id: UserWhereUniqueInput!): User
+}
+
+type Property {
+  address: String!
+  address_2: String!
+  city: String!
+  country: String!
+  id: ID!
+  name: String!
+  primary_phone_number: String!
+  state: String!
+  zip: String!
 }
 
 type Query {
@@ -32,6 +45,7 @@ type Query {
 type User {
   email: String!
   id: ID!
+  role: String!
 }
 
 input UserWhereUniqueInput {
