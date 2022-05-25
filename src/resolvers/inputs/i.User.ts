@@ -1,5 +1,5 @@
-// import { ROLE } from "@prisma/client";
-import { inputObjectType } from "nexus";
+import { ROLE } from "@prisma/client";
+import { enumType, inputObjectType } from "nexus";
 
 export const UserWhereUniqueInput = inputObjectType({
   name: "UserWhereUniqueInput",
@@ -8,11 +8,11 @@ export const UserWhereUniqueInput = inputObjectType({
   },
 });
 
-// const Role = enumType({
-//   name: "Role",
-//   members: [...Object.values(ROLE)],
-//   description: "The first Star Wars episodes released",
-// });
+const Role = enumType({
+  name: "Role",
+  members: [...Object.values(ROLE)],
+  description: "User Roles",
+});
 
 export const CreateUserInput = inputObjectType({
   name: "CreateUserInput",
@@ -21,14 +21,14 @@ export const CreateUserInput = inputObjectType({
     // t.string("last_name");
     t.string("email");
     t.string("password");
-    // t.field("role", { type: Role });
+    t.nonNull.field("role", { type: Role });
     // t.string("tenant_current_property_id");
     // t.string("organization_id");
   },
 });
 
-export const CreateUserInputTemp = inputObjectType({
-  name: "CreateUserInputTemp",
+export const CreateUserLogin = inputObjectType({
+  name: "CreateUserLogin",
   definition(t) {
     t.string("email");
     t.string("password");

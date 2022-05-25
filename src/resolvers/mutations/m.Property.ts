@@ -24,7 +24,7 @@ export const createProperty = mutationField("createProperty", {
     }
     const property = prisma.property.create({
       data: {
-        name: "",
+        name: "test",
         address: "",
         address_2: "",
         city: "",

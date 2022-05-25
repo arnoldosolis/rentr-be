@@ -1,12 +1,13 @@
 // import { ROLE } from "@prisma/client";
 import { mutationField, nonNull, nullable, stringArg } from "nexus";
-import { CreateUserInput, CreateUserInputTemp, UserWhereUniqueInput } from "../inputs";
+import { CreateUserInput, CreateUserInputTemp, CreateUserLogin, UserWhereUniqueInput } from "../inputs";
 import { User } from "../models";
 import argon2 from "argon2";
 import { ApolloError } from "apollo-server-core";
 import { sendEmail } from "../../services/sendEmail";
 import { v4 } from "uuid";
 import { FORGOT_PASSWORD_PREFIX } from "../../variables";
+import { ROLE } from "@prisma/client";
 
 // export const createUser = mutationField("createUser", {
 //   type: nullable(User),
@@ -62,7 +63,7 @@ export const deleteUser = mutationField("deleteUser", {
 
 export const register = mutationField("register", {
   type: User,
-  args: { user: nonNull(CreateUserInputTemp) },
+  args: { user: nonNull(CreateUserInput) },
   resolve: async (_root, args, { prisma, req }) => {
     if (!args.user.email) {
       throw new ApolloError("No email passed in");
@@ -80,11 +81,11 @@ export const register = mutationField("register", {
       const hashedPassword = await argon2.hash(args.user.password);
       const newUser = await prisma.user.create({
         data: {
-          // first_name: args.user?.first_name || "N/A",
-          // last_name: args.user?.last_name || "N/A",
           email: args.user.email || "",
           password: hashedPassword || "N/A",
-          // role: args.user?.role || ROLE.Tenant,
+          first_name: "",
+          last_name: "",
+          role: args.user.role,
         },
       });
       (req.session as any).user_id = newUser.id;
@@ -98,7 +99,7 @@ export const register = mutationField("register", {
 
 export const login = mutationField("login", {
   type: User,
-  args: { user: nonNull(CreateUserInputTemp) },
+  args: { user: nonNull(CreateUserLogin) },
   resolve: async (_root, args, { prisma, req }) => {
     if (!args.user.email) {
       throw new ApolloError("Email not passed in");

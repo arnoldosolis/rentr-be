@@ -5,9 +5,10 @@
 input CreateUserInput {
   email: String
   password: String
+  role: Role!
 }
 
-input CreateUserInputTemp {
+input CreateUserLogin {
   email: String
   password: String
 }
@@ -17,9 +18,9 @@ type Mutation {
   createProperty: Property!
   deleteUser(user: UserWhereUniqueInput!): User!
   forgotPassword(email: String): Boolean!
-  login(user: CreateUserInputTemp!): User!
+  login(user: CreateUserLogin!): User!
   logout: Boolean!
-  register(user: CreateUserInputTemp!): User!
+  register(user: CreateUserInput!): User!
   updateUser(user: CreateUserInput!, user_id: UserWhereUniqueInput!): User
 }
 
@@ -40,6 +41,13 @@ type Query {
   getUser(where: UserWhereUniqueInput!): User
   getUserByEmail(user: UserWhereUniqueInputEmail!): User
   getUsers: [User]!
+}
+
+"""User Roles"""
+enum Role {
+  Owner
+  Superintendent
+  Tenant
 }
 
 type User {

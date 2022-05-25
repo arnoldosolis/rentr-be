@@ -17,8 +17,9 @@ export interface NexusGenInputs {
   CreateUserInput: { // input type
     email?: string | null; // String
     password?: string | null; // String
+    role: NexusGenEnums['Role']; // Role!
   }
-  CreateUserInputTemp: { // input type
+  CreateUserLogin: { // input type
     email?: string | null; // String
     password?: string | null; // String
   }
@@ -31,6 +32,7 @@ export interface NexusGenInputs {
 }
 
 export interface NexusGenEnums {
+  Role: "Owner" | "Superintendent" | "Tenant"
 }
 
 export interface NexusGenScalars {
@@ -70,7 +72,7 @@ export interface NexusGenUnions {
 
 export type NexusGenRootTypes = NexusGenObjects
 
-export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars
+export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars & NexusGenEnums
 
 export interface NexusGenFieldTypes {
   Mutation: { // field return type
@@ -155,10 +157,10 @@ export interface NexusGenArgTypes {
       email?: string | null; // String
     }
     login: { // args
-      user: NexusGenInputs['CreateUserInputTemp']; // CreateUserInputTemp!
+      user: NexusGenInputs['CreateUserLogin']; // CreateUserLogin!
     }
     register: { // args
-      user: NexusGenInputs['CreateUserInputTemp']; // CreateUserInputTemp!
+      user: NexusGenInputs['CreateUserInput']; // CreateUserInput!
     }
     updateUser: { // args
       user: NexusGenInputs['CreateUserInput']; // CreateUserInput!
@@ -185,7 +187,7 @@ export type NexusGenObjectNames = keyof NexusGenObjects;
 
 export type NexusGenInputNames = keyof NexusGenInputs;
 
-export type NexusGenEnumNames = never;
+export type NexusGenEnumNames = keyof NexusGenEnums;
 
 export type NexusGenInterfaceNames = never;
 
