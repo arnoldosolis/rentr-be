@@ -14,9 +14,33 @@ declare global {
 }
 
 export interface NexusGenInputs {
+  CreateOrganizationInput: { // input type
+    address?: string | null; // String
+    address_2?: string | null; // String
+    city?: string | null; // String
+    country?: string | null; // String
+    email?: string | null; // String
+    name?: string | null; // String
+    primary_phone_number?: string | null; // String
+    state?: string | null; // String
+    zip?: string | null; // String
+  }
+  CreatePropertyInput: { // input type
+    address?: string | null; // String
+    address_2?: string | null; // String
+    city?: string | null; // String
+    country?: string | null; // String
+    name?: string | null; // String
+    primary_phone_number?: string | null; // String
+    state?: string | null; // String
+    zip?: string | null; // String
+  }
   CreateUserInput: { // input type
     email?: string | null; // String
+    first_name?: string | null; // String
+    last_name?: string | null; // String
     password?: string | null; // String
+    residence?: string | null; // String
     role: NexusGenEnums['Role']; // Role!
   }
   CreateUserLogin: { // input type
@@ -45,6 +69,17 @@ export interface NexusGenScalars {
 
 export interface NexusGenObjects {
   Mutation: {};
+  Organization: { // root type
+    address: string; // String!
+    address_2: string; // String!
+    city: string; // String!
+    country: string; // String!
+    id: string; // ID!
+    name: string; // String!
+    primary_phone_number: string; // String!
+    state: string; // String!
+    zip: string; // String!
+  }
   Property: { // root type
     address: string; // String!
     address_2: string; // String!
@@ -59,7 +94,9 @@ export interface NexusGenObjects {
   Query: {};
   User: { // root type
     email: string; // String!
+    first_name: string; // String!
     id: string; // ID!
+    last_name: string; // String!
     role: string; // String!
   }
 }
@@ -85,6 +122,18 @@ export interface NexusGenFieldTypes {
     register: NexusGenRootTypes['User']; // User!
     updateUser: NexusGenRootTypes['User'] | null; // User
   }
+  Organization: { // field return type
+    address: string; // String!
+    address_2: string; // String!
+    city: string; // String!
+    country: string; // String!
+    id: string; // ID!
+    name: string; // String!
+    owned_properties: NexusGenRootTypes['Property'][]; // [Property!]!
+    primary_phone_number: string; // String!
+    state: string; // String!
+    zip: string; // String!
+  }
   Property: { // field return type
     address: string; // String!
     address_2: string; // String!
@@ -104,7 +153,11 @@ export interface NexusGenFieldTypes {
   }
   User: { // field return type
     email: string; // String!
+    first_name: string; // String!
     id: string; // ID!
+    last_name: string; // String!
+    organizations: NexusGenRootTypes['Organization']; // Organization!
+    residence: NexusGenRootTypes['Property']; // Property!
     role: string; // String!
   }
 }
@@ -119,6 +172,18 @@ export interface NexusGenFieldTypeNames {
     logout: 'Boolean'
     register: 'User'
     updateUser: 'User'
+  }
+  Organization: { // field return type name
+    address: 'String'
+    address_2: 'String'
+    city: 'String'
+    country: 'String'
+    id: 'ID'
+    name: 'String'
+    owned_properties: 'Property'
+    primary_phone_number: 'String'
+    state: 'String'
+    zip: 'String'
   }
   Property: { // field return type name
     address: 'String'
@@ -139,7 +204,11 @@ export interface NexusGenFieldTypeNames {
   }
   User: { // field return type name
     email: 'String'
+    first_name: 'String'
     id: 'ID'
+    last_name: 'String'
+    organizations: 'Organization'
+    residence: 'Property'
     role: 'String'
   }
 }
@@ -149,6 +218,9 @@ export interface NexusGenArgTypes {
     changePassword: { // args
       password?: string | null; // String
       token?: string | null; // String
+    }
+    createProperty: { // args
+      property: NexusGenInputs['CreatePropertyInput']; // CreatePropertyInput!
     }
     deleteUser: { // args
       user: NexusGenInputs['UserWhereUniqueInput']; // UserWhereUniqueInput!
@@ -160,6 +232,7 @@ export interface NexusGenArgTypes {
       user: NexusGenInputs['CreateUserLogin']; // CreateUserLogin!
     }
     register: { // args
+      initial_org: NexusGenInputs['CreateOrganizationInput']; // CreateOrganizationInput!
       user: NexusGenInputs['CreateUserInput']; // CreateUserInput!
     }
     updateUser: { // args

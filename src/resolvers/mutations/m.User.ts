@@ -1,13 +1,13 @@
 // import { ROLE } from "@prisma/client";
 import { mutationField, nonNull, nullable, stringArg } from "nexus";
-import { CreateUserInput, CreateUserInputTemp, CreateUserLogin, UserWhereUniqueInput } from "../inputs";
+import { CreateUserInput, CreateUserLogin, UserWhereUniqueInput } from "../inputs";
 import { User } from "../models";
 import argon2 from "argon2";
 import { ApolloError } from "apollo-server-core";
 import { sendEmail } from "../../services/sendEmail";
 import { v4 } from "uuid";
 import { FORGOT_PASSWORD_PREFIX } from "../../variables";
-import { ROLE } from "@prisma/client";
+import { CreateOrganizationInput } from "../inputs/i.Organization";
 
 // export const createUser = mutationField("createUser", {
 //   type: nullable(User),
@@ -63,7 +63,7 @@ export const deleteUser = mutationField("deleteUser", {
 
 export const register = mutationField("register", {
   type: User,
-  args: { user: nonNull(CreateUserInput) },
+  args: { user: nonNull(CreateUserInput), initial_org: nonNull(CreateOrganizationInput) },
   resolve: async (_root, args, { prisma, req }) => {
     if (!args.user.email) {
       throw new ApolloError("No email passed in");
@@ -86,6 +86,19 @@ export const register = mutationField("register", {
           first_name: "",
           last_name: "",
           role: args.user.role,
+          organizations: {
+            create: {
+              name: "N/A",
+              email: "",
+              address: "",
+              address_2: "",
+              city: "",
+              state: "",
+              zip: "",
+              country: "",
+              primary_phone_number: "",
+            },
+          },
         },
       });
       (req.session as any).user_id = newUser.id;

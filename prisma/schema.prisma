@@ -26,8 +26,8 @@ model User {
   password      String
   role          ROLE
   organizations Organization[]
-  residence     Property       @relation(fields: [propertyId], references: [id])
-  propertyId    String         @map("property_id")
+  residence     Property?      @relation(fields: [propertyId], references: [id])
+  propertyId    String?        @map("property_id")
 }
 
 model Organization {
@@ -40,6 +40,7 @@ model Organization {
   address_2            String
   city                 String
   state                String
+  zip                  String
   country              String     @default("US")
   primary_phone_number String
   properties           Property[]
@@ -54,9 +55,9 @@ model Property {
   name                 String
   address              String
   address_2            String
-  zip                  String
   city                 String
   state                String
+  zip                  String
   country              String        @default("US")
   primary_phone_number String
   Organization         Organization? @relation(fields: [organizationId], references: [id])

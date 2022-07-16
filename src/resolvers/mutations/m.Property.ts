@@ -1,5 +1,6 @@
 import { ApolloError } from "apollo-server-core";
-import { mutationField } from "nexus";
+import { mutationField, nonNull } from "nexus";
+import { CreatePropertyInput } from "../inputs/i.Property";
 import { Property } from "../models";
 
 // export const createProperty = mutationField("createProperty", {
@@ -17,6 +18,7 @@ import { Property } from "../models";
 // });
 export const createProperty = mutationField("createProperty", {
   type: Property,
+  args: { property: nonNull(CreatePropertyInput) },
   resolve: async (_root, _args, { prisma, req }) => {
     // is user authenticated
     if (!(req.session as any).user_id) {

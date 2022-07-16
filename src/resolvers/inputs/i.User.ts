@@ -17,11 +17,12 @@ const Role = enumType({
 export const CreateUserInput = inputObjectType({
   name: "CreateUserInput",
   definition(t) {
-    // t.nullable.string("first_name");
-    // t.string("last_name");
     t.string("email");
     t.string("password");
     t.nonNull.field("role", { type: Role });
+    t.string("first_name");
+    t.string("last_name");
+    t.nullable.string("residence");
     // t.string("tenant_current_property_id");
     // t.string("organization_id");
   },

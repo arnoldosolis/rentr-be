@@ -2,9 +2,35 @@
 ### Do not make changes to this file directly
 
 
+input CreateOrganizationInput {
+  address: String
+  address_2: String
+  city: String
+  country: String
+  email: String
+  name: String
+  primary_phone_number: String
+  state: String
+  zip: String
+}
+
+input CreatePropertyInput {
+  address: String
+  address_2: String
+  city: String
+  country: String
+  name: String
+  primary_phone_number: String
+  state: String
+  zip: String
+}
+
 input CreateUserInput {
   email: String
+  first_name: String
+  last_name: String
   password: String
+  residence: String
   role: Role!
 }
 
@@ -15,13 +41,28 @@ input CreateUserLogin {
 
 type Mutation {
   changePassword(password: String, token: String): User!
-  createProperty: Property!
+  createProperty(property: CreatePropertyInput!): Property!
   deleteUser(user: UserWhereUniqueInput!): User!
   forgotPassword(email: String): Boolean!
   login(user: CreateUserLogin!): User!
   logout: Boolean!
-  register(user: CreateUserInput!): User!
+  register(initial_org: CreateOrganizationInput!, user: CreateUserInput!): User!
   updateUser(user: CreateUserInput!, user_id: UserWhereUniqueInput!): User
+}
+
+type Organization {
+  address: String!
+  address_2: String!
+  city: String!
+  country: String!
+  id: ID!
+  name: String!
+
+  """Returns all owned property by landlord through organization"""
+  owned_properties: [Property!]!
+  primary_phone_number: String!
+  state: String!
+  zip: String!
 }
 
 type Property {
@@ -52,7 +93,15 @@ enum Role {
 
 type User {
   email: String!
+  first_name: String!
   id: ID!
+  last_name: String!
+
+  """Returns all organizations user is affiliated to or owns"""
+  organizations: Organization!
+
+  """Returns place of residence for tenant"""
+  residence: Property!
   role: String!
 }
 
